@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyPortfolio</title>
+  <style>
+    :root {
+      --netflix-red: #e50914;
+      --netflix-black: #141414;
+      --netflix-dark-gray: #181818;
+      --netflix-light-gray: #333333;
+      --netflix-text: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--netflix-black);
+      color: var(--netflix-text);
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      padding: 20px 60px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0));
+      position: fixed;
+      width: 100%;
+      z-index: 10;
+      transition: background-color 0.3s;
+    }
+
+    .navbar.scrolled {
+      background-color: var(--netflix-black);
+    }
+
+    .logo {
+      color: var(--netflix-red);
+      font-size: 32px;
+      font-weight: bold;
+      margin-right: 40px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      flex-grow: 1;
+    }
+
+    .nav-underline {
+      position: absolute;
+      bottom: 0;
+      height: 3px;
+      background-color: red;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .nav-links li {
+      margin-right: 20px;
+    }
+
+    .nav-links a {
+      color: var(--netflix-text);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      color: #b3b3b3;
+    }
+
+    .hero {
+      height: 80vh;
+      display: flex;
+      align-items: flex-end; ;
+      padding: 0 60px;
+      padding-bottom: 80px;
+      position: relative;
+    }
+
+
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+
+    .hero-content {
+      max-width: 600px;
+      z-index: 2;
+      bottom: 20px;
+    }
+
+    .hero-gif {
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+    margin-top: 10px;
+    }
+
+    .hero-title {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .hero-subtitle {
+      font-size: 26px;
+      margin-bottom: 30px;
+      font-weight: normal;
+    }
+
+    .hero-buttons {
+      display: flex;
+    }
+
+    .hero-btn {
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      margin-right: 15px;
+    }
+
+    .primary-btn {
+      background-color: var(--netflix-red);
+      color: white;
+    }
+
+    .secondary-btn {
+      background-color: rgba(109, 109, 110, 0.7);
+      color: white;
+    }
+
+    .row-title {
+      font-size: 24px;
+      margin: 50px 0 20px 60px;
+    }
+
+    .row {
+      padding: 0 60px;
+      overflow-x: auto;
+      display: flex;
+      scroll-behavior: smooth;
+    }
+
+    .row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .item {
+      min-width: 250px;
+      width: calc(25% - 20px);
+      height: 150px;
+      margin-right: 30px;
+      position: relative;
+      transition: transform 0.3s;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    #education .item {
+      min-width: 300px;
+      width: calc(30% - 20px);
+      height: 200px;
+      margin-right: 30px;
+      position: relative;
+      transition: transform 0.3s;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    #Work_Experience .item {
+      min-width: 300px;
+      width: calc(30% - 20px);
+      height: 200px;
+      margin-right: 30px;
+      position: relative;
+      transition: transform 0.3s;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+
+    #certification-section-4 .item {
+      width: 10px;
+    }
+
+    .item:hover {
+      transform: scale(1.08);
+      z-index: 2;
+    }
+
+    .item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .item-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      padding: 10px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .item:hover .item-overlay {
+      opacity: 1;
+    }
+
+    .item-title {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .item-info {
+      font-size: 12px;
+      color: #b3b3b3;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      z-index: 20;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background-color: var(--netflix-dark-gray);
+      margin: 10vh auto;
+      width: 70%;
+      max-width: 900px;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      animation: modalFadeIn 0.3s;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      height: 400px;
+      position: relative;
+    }
+
+    .modal-header img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-header-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to top, var(--netflix-dark-gray), transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 30px;
+    }
+
+    .modal-title {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .modal-meta {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-year, .modal-category {
+      margin-right: 15px;
+      font-size: 14px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .modal-btn {
+      padding: 8px 20px;
+      margin-right: 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .modal-btn svg {
+      margin-right: 10px;
+    }
+
+    .modal-body {
+      padding: 0 30px 30px;
+    }
+
+    .modal-description {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .modal-info {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .modal-info-column {
+      flex: 1;
+    }
+
+    .modal-info-title {
+      font-size: 16px;
+      color: #777;
+      margin-bottom: 5px;
+    }
+
+    .modal-info-content {
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .modal-skills {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .skill-tag {
+      background-color: var(--netflix-light-gray);
+      padding: 5px 10px;
+      margin: 0 10px 10px 0;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--netflix-black);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      font-size: 20px;
+    }
+
+    .profile-banner {
+      background-color: var(--netflix-dark-gray);
+      padding: 30px 60px;
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 30px;
+    }
+
+    .profile-details {
+      flex: 1;
+    }
+
+    .profile-name {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .profile-headline {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #b3b3b3;
+    }
+
+    .profile-stats {
+      display: flex;
+    }
+
+    .profile-stat {
+      margin-right: 20px;
+      font-size: 14px;
+    }
+
+    .footer {
+      padding: 50px 60px;
+      margin-top: 50px;
+      text-align: center;
+      color: #737373;
+      font-size: 14px;
+    }
+
+    .social-links {
+      margin-bottom: 20px;
+    }
+
+    .social-link {
+      margin: 0 10px;
+      color: #737373;
+      text-decoration: none;
+    }
+
+    .cert-link {
+    text-decoration: none; /* Removes underline */
+    color: inherit; /* Keeps the original text color */
+    }
+
+    .cert-link:visited {
+    color: inherit; /* Prevents visited links from turning purple */
+    }
+
+    .cert-link .item-title {
+    color: white; /* Or any color you prefer */
+    }
+
+    .social-link{
+      text-decoration: None;
+      color: white;
+    }
+
+    .social-link:hover {
+      text-decoration: None;
+      color: rgb(242, 1, 1);
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 20px 30px;
+      }
+      
+      .hero {
+        padding: 0 30px;
+      }
+      
+      .hero-title {
+        font-size: 42px;
+      }
+      
+      .hero-subtitle {
+        font-size: 20px;
+      }
+      
+      .row-title {
+        margin-left: 30px;
+      }
+      
+      .row {
+        padding: 0 30px;
+      }
+      
+      
+      .profile-banner {
+        padding: 20px 30px;
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .profile-avatar {
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+      
+      .modal-content {
+        width: 90%;
+      }
+    }
+
+  :root {
+          --badge-size: 140px;
+          --badge-margin: 20px;
+          --primary-color: #e50914;
+          --background-dark: #141414;
+          --badge-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+          --badge-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(0, 0, 0, 0.1) 100%);
+      }
+
+      body {
+          background-color: var(--background-dark);
+          color: white;
+          font-family: 'Arial', sans-serif;
+          margin: 0;
+          padding: 10px;
+      }
+
+      .row-title {
+          margin-left: 20px;
+          font-size: 24px;
+          font-weight: 500;
+          color: #fff;
+      }
+
+      .row-container {
+          position: relative;
+          padding: 0 20px;
+      }
+
+      .row {
+          display: flex;
+          overflow-x: auto;
+          padding: 20px 0;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+
+      .row::-webkit-scrollbar {
+          display: none;
+      }
+
+      .skill-badge {
+          min-width: var(--badge-size);
+          height: var(--badge-size);
+          margin: 0 var(--badge-margin);
+          border-radius: 50%;
+          background: var(--badge-gradient);
+          box-shadow: var(--badge-shadow);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          background-color: #333;
+          border: 2px solid #444;
+          padding: 10px;
+      }
+
+      .skill-badge:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 20px 5px rgba(244, 4, 4, 0.6), 0 0 40px 10px rgba(244, 4, 4, 0.4);
+        border-color: #f40404;
+      }
+
+
+      .skill-badge.selected {
+          background-color: rgba(229, 9, 20, 0.3);
+          border-color: var(--primary-color);
+          transform: translateY(-5px);
+          box-shadow: 0 12px 28px rgba(229, 9, 20, 0.4);
+      }
+
+      .skill-badge img {
+          width: 70px; /* Increased size */
+          height: 70px; /* Increased size */
+          object-fit: contain;
+      }
+
+      .skill-badge span {
+          margin-top: 5px;
+          font-size: 14px;
+          font-weight: 600;
+          text-align: center;
+          display: block;
+      }
+
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="logo">Netflix</a>
+    <ul class="nav-links">
+      <li><a href="#about" onclick="scrollToSection('about'); return false;">About Me</a></li>
+      <li><a href="#projects" onclick="scrollToSection('Work_Experience'); return false;">Work Experience</a></li>
+      <li><a href="#certifications" onclick="scrollToSection('certifications'); return false;">Certifications</a></li>
+      <li><a href="#education" onclick="scrollToSection('education'); return false;">Education</a></li>
+      <li><a href="#skills" onclick="scrollToSection('skills'); return false;">Skills</a></li>
+    </ul>
+  </nav>
+
+
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <video autoplay muted loop class="hero-video">
+      <source src="https://www.dropbox.com/scl/fi/39kwr095ozntocsk0a8q7/video_1.mov?rlkey=w9p9xsrnecosigi65cni35orq&st=4jaqvg0j&raw=1" type="video/mp4">
+    </video>
+    <div class="hero-content">
+      <h1 class="hero-title">Ninad Mandavkar</h1>
+      <h2 class="hero-subtitle">Data Analyst</h2>
+
+      <!--Icons-->
+      <div class="social-links">
+        <a href="https://www.linkedin.com/in/ninad-s-mandavkar-12328715b" class="social-link" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/Ninad077" class="social-link" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+          </svg>
+          GitHub
+        </a>
+        <a href="https://medium.com/@ninadmandavkar28" class="social-link" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M0 0v24h24V0H0zm19.938 5.686L18.651 6.92a.376.376 0 0 0-.143.362v9.067a.376.376 0 0 0 .143.361l1.257 1.234v.271h-6.322v-.27l1.302-1.265c.128-.128.128-.165.128-.36V8.99l-3.62 9.195h-.49L6.69 8.99v6.163a.85.85 0 0 0 .233.707l1.694 2.054v.271H3.815v-.27L5.51 15.86a.82.82 0 0 0 .218-.707V8.027a.624.624 0 0 0-.203-.527L4.019 5.686v-.27h4.674l3.613 7.923 3.176-7.924h4.456v.271z"/>
+          </svg>
+          Medium
+        </a>
+        <a href="https://huggingface.co/Ninad077" class="social-link" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm3.5-4.5c-.313 0-.593-.147-.778-.38a2.507 2.507 0 0 0-3.444 0c-.185.233-.465.38-.778.38-.552 0-1-.448-1-1 0-.198.06-.396.172-.566a4.498 4.498 0 0 1 7.656 0c.112.17.172.368.172.566 0 .552-.448 1-1 1zm-7 1.5a1.5 1.5 0 1 1-3.001-.001A1.5 1.5 0 0 1 8.5 17zm9 0a1.5 1.5 0 1 1-3.001-.001A1.5 1.5 0 0 1 17.5 17zm-9.976-7.65c-.056-.085-.084-.186-.084-.287 0-.173.08-.339.221-.443a6.5 6.5 0 0 1 7.678 0c.141.104.221.27.221.443 0 .101-.028.202-.084.287a5.5 5.5 0 0 1-7.892 0z"/>
+          </svg>
+          Hugging Face
+        </a>        
+      </div>
+      
+      <div class="hero-buttons">
+        <button class="hero-btn primary-btn" onclick="scrollToSection('projects')">View Projects</button>
+        <button class="hero-btn secondary-btn" onclick="showModal('contact-modal')">Contact Me</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profile Section -->
+  <section id="about" class="profile-banner">
+    <div class="profile-details">
+      <h2 class="profile-name">ABOUT ME</h2>
+      <p class="profile-headline">I am Ninad. A Master's graduate from TU Ilmenau, Germany. I love to code, deploy ML algorithms and play around with data. Maths is something that I was always enamoured by and apparently the prime reason for my inclination towards Data Science as a field. I am equally curious about leveraging Deep Learning, NLPs & AI as a tool to enhance productivity in the workforce. I strongly believe in being passionate, curious & resilient. Nuf' said, to know more about me do visit my social media handles below. Also, for official queries one can drop me a mail.
+      </p>
+      <div class="profile-stats">
+        <div class="profile-stat">🎓 MSc. Micro & Nanotechnology</div>
+        <div class="profile-stat">📍 TU Ilmenau, Germany</div>
+        <div class="profile-stat">💼 3+ Years Experience as a Data Analyst</Data></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <a href="https://www.fynd.com/" target="_blank" class="cert-link">
+    <h2 class="row-title" id="Work_Experience">Work Experience</h2>
+    <div class="row" id="Work_Experience">
+      <div class="item" onclick="showModal('project1-modal')">
+        <img src="https://i.gifer.com/4mXR.gif" alt="Project 1">
+        <div class="item-overlay">
+          <h3 class="item-title">Data Analyst</h3>
+          <p class="item-info">Fynd</p>
+          <p class="item-info">(Jun 2024 - Present)</p>
+        </div>
+      </div>
+    </a>
+
+  <a href="https://aivariant.com/" target="_blank" class="cert-link">
+    <div class="item" onclick="showModal('project2-modal')">
+      <img src="https://i.gifer.com/QyvM.gif" alt="Project 2">
+      <div class="item-overlay">
+        <h3 class="item-title">Data Analayst</h3>
+        <p class="item-info">AI variant</p>
+        <p class="item-info">(Oct 2023 - Apr 2024)</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://group.mercedes-benz.com/careers/about-us/locations/location-detail-page-5125.html" target="_blank" class="cert-link">
+    <div class="item" onclick="showModal('project3-modal')">
+      <img src="https://i.gifer.com/3WsR.gif" alt="Project 3">
+      <div class="item-overlay">
+        <h3 class="item-title">Business Analyst</h3>
+        <p class="item-info">Mercedes Benz</p>
+        <p class="item-info">(Mar 2023 - Aug 2023)</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://www.tu-ilmenau.de/en/research/research-activities/institutes-and-technological-centers/zentrum-fuer-mikro-und-nanotechnologien" target="_blank" class="cert-link">
+    <div class="item" onclick="showModal('project4-modal')">
+      <img src="https://i.gifer.com/Skg6.gif" alt="Project 4">
+      <div class="item-overlay">
+        <h3 class="item-title">Research Analyst</h3>
+        <p class="item-info">ZMN</p>
+        <p class="item-info">(Jul 2020 - Sep 2022)</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://www.tu-ilmenau.de/en/university/departments/department-of-electrical-engineering-and-information-technology/profile/institutes-and-groups/nanotechnology-group" target="_blank" class="cert-link">
+    <div class="item" onclick="showModal('project5-modal')">
+      <img src="https://i.gifer.com/6EZ.gif" alt="Project 5">
+      <div class="item-overlay">
+        <h3 class="item-title">Research Intern</h3>
+        <p class="item-info">Nanotechnology Research Group</p>
+        <p class="item-info">(Oct 2020 - May 2022)</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+
+
+  <!-- Certifications -->
+<h2 class="row-title" id="certifications">Certifications</h2>
+<div class="row">
+
+  <!-- Certification 1 -->
+  <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/9PBTqmSxAf6zZTseP/io9DzWKe3PTsiS6GG_9PBTqmSxAf6zZTseP_wJCorZvQjEEjrXDSE_1740052815921_completion_certificate.pdf" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/Y3VY.gif" alt="Certification 1" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Data Analytics Job Simulation</h3>
+        <p class="item-info">Issued by Deloitte • Feb 2025</p>
+      </div>
+    </div>
+  </a>
+
+  <!-- Certification 2 -->
+  <a href="https://www.hackerrank.com/certificates/69731b52a9f7" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/3paX.gif" alt="Certification 2" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">SQL Basic</h3>
+        <p class="item-info">Issued by Hackerrank • Feb 2025</p>
+      </div>
+    </div>
+  </a>
+
+  <!-- Certification 3 -->
+  <a href="https://www.coursera.org/account/accomplishments/verify/3VFXQ8CK93B3?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/6ROf.gif" alt="Certification 3" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">BigQuery for Data Analysts</h3>
+        <p class="item-info">Issued by GCP • May 2024</p>
+      </div>
+    </div>
+  </a>
+
+  <!-- Certification 4 -->
+  <a href="https://www.coursera.org/account/accomplishments/verify/KB6WHMA8REBS?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/g1vY.gif" alt="Certification 4" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Introduction to AI & Machine Learning on Google Cloud</h3>
+        <p class="item-info">Issued by GCP • May 2024</p>
+      </div>
+    </div>
+  </a>
+
+  <!-- Certification 5 -->
+  <a href="https://www.hackerrank.com/certificates/77cc650d6937" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/8tNE.gif" alt="Certification 5" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Python Certificate</h3>
+        <p class="item-info">Issued by Hackerrank • May 2024</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- Certification section 2 -->
+
+<h2 class="row-title" id="certifications"></h2>
+<div class="row">
+
+  <a href="https://www.coursera.org/account/accomplishments/verify/5RQQ6W8DCJW4?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/1JKx.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Supervised Machine Learning: Regression and Classification</h3>
+        <p class="item-info">Issued by Deeplearning.AI • May 2024</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://drive.google.com/file/d/13ND5hQ4TKN6ia9kK2BpOdo5aHD43WRJO/view?usp=sharing" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/5s4W.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">AI Variant certificate</h3>
+        <p class="item-info">Issued by AI Variant • Apr 2024</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://drive.google.com/file/d/1weqJ0miUhxJnpducuAfpT0pSr_V3XLlz/view" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/Yt1X.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">ExcelR DA certificate</h3>
+        <p class="item-info">Issued by ExcelR • Feb 2024</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://drive.google.com/file/d/1RybNJvX0QfqV8e3HrvmCnROuxqNUaHHi/view" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/2vs.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">BA recommendation letter</h3>
+        <p class="item-info">Issued by Mercedes-Benz • Aug 2023</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://www.coursera.org/account/accomplishments/verify/CPRFMTDQP672?utm_source=ios&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/VEIa.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Data Science Orientation</h3>
+        <p class="item-info">Issued by IBM • Oct 2022</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- Certification section 3 -->
+
+<h2 class="row-title" id="certifications"></h2>
+<div class="row">
+
+  <a href="https://www.coursera.org/account/accomplishments/verify/FWLQDYF3XDCP?utm_source=ios&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/DTtx.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Tools for Data Science</h3>
+        <p class="item-info">Issued by IBM • Oct 2022</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://drive.google.com/file/d/1mYEgxa-f4S9BWX_mK0Siav8wKs8ahRs7/view" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/C0qD.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">ZMN Recommendation letter</h3>
+        <p class="item-info">Issued by ZMN • Sep 2022</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://drive.google.com/file/d/1rRHzx6-_LMida_yMp0xlVL_Z6MiOkhuV/view" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/No2O.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Nanotechnology Internship letter</h3>
+        <p class="item-info">Issued by Meitnerbau (Ilmenau) • Aug 2022</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://drive.google.com/file/d/1rTigxAkcIcS7pKTIv9Hb4ehu_ioGa-iD/view" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/MmOF.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Goethe B1 certificate</h3>
+        <p class="item-info">Issued by Goethe Institute • Jul 2019</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://drive.google.com/file/d/11Y4NrQThdUSLh53iTTLd1kQCYC4F02AU/view" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/1EXL.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Goethe A2 certificate</h3>
+        <p class="item-info">Issued by Goethe Institute • May 2019</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!--Certification section 4-->
+
+<h2 class="row-title"></h2>
+<div class="row" id="certification-section-4">
+
+  <a href="https://drive.google.com/file/d/18qpQYJ06dJgsVKxJx7QfWOfcAAJ7I8bf/view" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/77vq.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Goethe A1 certificate</h3>
+        <p class="item-info">Issued by Goethe Institute • Mar 2019</p>
+      </div>
+    </div>
+  </a>
+
+  <a href="https://drive.google.com/file/d/1PFWU_jnjozLbMIPpfE09pgOpPYLursdk/view" target="_blank" class="cert-link">
+    <div class="item">
+      <img src="https://i.gifer.com/I0Jl.gif" alt="Certification 6" class="cert-image">
+      <div class="item-overlay">
+        <h3 class="item-title">Recommendation letter</h3>
+        <p class="item-info">Issued by Shah & Anchor College • July 2018</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+
+
+<!--Education section-->
+
+<h2 class="row-title" id="education">Education</h2>
+  <div class="row" id="education">
+
+    <a href="https://www.excelr.com/" target="_blank" class="cert-link">
+      <div class="item">
+        <img src="https://i.gifer.com/M6cc.gif" alt="Education 1" class="cert-image">
+        <div class="item-overlay">
+          <h3 class="item-title">Data Science bootcamp</h3>
+          <p class="item-info">ExcelR (Mumbai) • Sep 2023- May 2024</p>
+        </div>
+      </div>
+    </a>
+
+
+    <a href="https://www.tu-ilmenau.de/en/" target="_blank" class="cert-link">
+      <div class="item">
+        <img src="https://i.gifer.com/1sPi.gif" alt="Education 1" class="cert-image">
+        <div class="item-overlay">
+          <h3 class="item-title">MSc. Micro & Nanotechnology</h3>
+          <p class="item-info">TU Ilmenau (Germany) • Sep 2019- Sep 2022</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.goethe.de/ins/in/en/index.html" target="_blank" class="cert-link">
+      <div class="item">
+        <img src="https://i.gifer.com/2HFs.gif" alt="Education 2" class="cert-image">
+        <div class="item-overlay">
+          <h3 class="item-title">Zertifikat B1 Deutsch</h3>
+          <p class="item-info">Goethe Institute (Mumbai) • 2018-2019</p>
+        </div>
+      </div>
+    </a>
+
+
+    <a href="https://www.sakec.ac.in/" target="_blank" class="cert-link">
+      <div class="item">
+        <img src="https://i.gifer.com/4B4.gif" alt="Education 3" class="cert-image">
+        <div class="item-overlay">
+          <h3 class="item-title">B.E. Electronics Engineering</h3>
+          <p class="item-info">Shah & Anchor College (Mumbai) • 2014-2018</p>
+        </div>
+      </div>
+    </a>
+
+
+    <a href="https://www.ruparel.edu/" target="_blank" class="cert-link">
+      <div class="item">
+        <img src="https://i.gifer.com/2eP6.gif" alt="Education 3" class="cert-image">
+        <div class="item-overlay">
+          <h3 class="item-title">High School</h3>
+          <p class="item-info">D.G. Ruparel College (Mumbai) • 2012-2014</p>
+        </div>
+      </div>
+    </a>
+
+
+    <a href="https://www.ies.edu/index.html" target="_blank" class="cert-link">
+      <div class="item">
+        <img src="https://i.gifer.com/CbD2.gif" alt="Education 3" class="cert-image">
+        <div class="item-overlay">
+          <h3 class="item-title">Primary School</h3>
+          <p class="item-info">I.E.S King George School (Mumbai) • 2002-2012</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+
+<h2 class="row-title">Skills</h2>
+  <div class="row-container" id = "section"></div>
+      <div class="row" id="skills">
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python">
+              <span>Python</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://cdn.worldvectorlogo.com/logos/google-bigquery-logo-1.svg" alt="SQL">
+              <span>BigQuery</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://cdn.worldvectorlogo.com/logos/google-cloud-1.svg" alt="GCP">
+              <span>GCP</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML">
+              <span>HTML</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/CSS3_logo.svg" alt="CSS">
+              <span>CSS</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://cdn.worldvectorlogo.com/logos/pandas.svg" alt="Pandas">
+              <span>Pandas</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://logos-download.com/wp-content/uploads/2021/01/Scikit_Learn_Logo-1536x829.png" alt="Pandas">
+              <span>Scikit Learn</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://icon.icepanel.io/Technology/svg/Streamlit.svg" alt="Looker Studio">
+              <span>Streamlit</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg" alt="Power BI">
+              <span>Power BI</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://cdn.worldvectorlogo.com/logos/tableau-software.svg" alt="Tableau">
+              <span>Tableau</span>
+          </div>
+          <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://www.svgrepo.com/show/354012/looker-icon.svg" alt="Looker Studio">
+              <span>Looker Studio</span>
+          </div>
+            <div class="skill-badge" onclick="toggleSelection(this)">
+              <img src="https://www.svgrepo.com/show/452163/autodesk.svg" alt="Autodesk Inventor">
+              <span>Autodesk Inventor</span>
+          </div>
+      </div>
+  </div>
+
+  <script>
+      function toggleSelection(badge) {
+          badge.classList.toggle('selected');
+      }
+
+      function scrollSkills(direction) {
+          const skillsRow = document.getElementById('skills');
+          const scrollAmount = 300;
+          
+          if (direction === 'left') {
+              skillsRow.scrollBy({
+                  left: -scrollAmount,
+                  behavior: 'smooth'
+              });
+          } else {
+              skillsRow.scrollBy({
+                  left: scrollAmount,
+                  behavior: 'smooth'
+              });
+          }
+      }
+  </script>
+
+
+  <script>
+    function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    const navbarHeight = document.getElementById('navbar').offsetHeight; // Get navbar height
+
+    if (section) {
+        window.scrollTo({
+            top: section.offsetTop - navbarHeight - 10, // Offset by navbar height + extra padding
+            behavior: 'smooth'
+        });
+    }
+}
+  </script>
+
+<!-- Footer with Social Links -->
+<footer class="footer">
+    <p>© 2025 Ninad Mandavkar. All rights reserved.</p>
+  </footer>
